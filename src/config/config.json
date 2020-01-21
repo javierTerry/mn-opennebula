@@ -1,0 +1,95 @@
+{
+  "HIPERVISOR": {
+    "MC": {
+      "CRED": {
+        "USER": "virtualizacion",
+        "PWD": "V1rtu4l$"
+      },
+      "IP": "172.35.29.10"
+      ,"DC" : "MEX5"
+    }
+    ,"LA4": {
+      "CRED": {
+        "USER": "virtualizacion",
+        "PWD": "V1rtu4l$"
+      },
+      "IP": "192.168.21.10"
+      ,"DC" : "LAX4"
+    }
+    ,"LAOLD02": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "192.168.20.4"
+      ,"DC" : "LAX"
+    }
+    ,"LAOLD03": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "192.168.20.6"
+      ,"DC" : "LAX"
+    }
+    ,"LAOLD01": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "192.168.20.2"
+      ,"DC" : "LAX"
+    }
+    ,"OLD02": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "172.21.36.6"
+      ,"DC" : "MEX5"
+    }
+    ,"OLD03": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "172.21.36.7"
+      ,"DC" : "MEX5"
+    }
+    ,"OLDSF02": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "172.19.215.7"
+      ,"DC" : "MEX2"
+    }
+    ,"OLDSF01": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "172.19.215.4"
+      ,"DC" : "MEX2"
+    }
+    ,"OLD04": {
+      "CRED": {
+        "USER": "infraestructura",
+        "PWD": "E54HPTmk"
+      },
+      "IP": "172.21.48.2"
+      ,"DC" : "MEX2"
+    }
+   
+  }
+  ,"NOTIFICATION": {
+    "RECEIVERS": [
+      "chhernandezs@kionetworks.com"
+    ],
+    "FROM" : "noreply_hypercx@kionetworks.com"
+  },
+  "SMTP" : "172.35.16.7"
+}	
+
+
+
