@@ -24,12 +24,6 @@ class Host():
 
 		print "CLUSTER, ID CLUSTER, ID HOST, NAME, STATE, NO INSTANCIAS,WILDS,ZOMBIES, INSTANCIAS IDS"
 		for x in self.poolHost.HOST :
-			#print (x.TEMPLATE)
-			#print (x.TEMPLATE['WILDS'])
-			#for y in x.TEMPLATE:
-			#	print y
-				#sys.exit()
-
 			if 'TOTAL_ZOMBIES' in x.TEMPLATE :
 				None
 			else :
@@ -41,10 +35,32 @@ class Host():
 
 			print "{}, {}, {}, {}, {}, {}, {},{}, {}".format(x.CLUSTER, x.CLUSTER_ID, x.ID, x.NAME, x.STATE, len(x.VMS.ID),x.TEMPLATE['TOTAL_ZOMBIES'],x.TEMPLATE['TOTAL_WILDS'], x.VMS.ID)
 			
-			#sys.exit()
+
+	def diccionario(self,DC):
+		"""Listar host 
+			Resulto se imprime en pantalla, opcion facil para obtener un csv
+		"""
+		dic = {DC : {}}
+		cluster = {}
 
 
+		for x in self.poolHost.HOST:
 
+			if x.CLUSTER in dic[DC] :
+				pass
+			else :
+				dic[DC].update({x.CLUSTER : {} })
+
+			if x.NAME in dic[DC][x.CLUSTER] :
+				pass
+			else :
+				dic[DC][x.CLUSTER].update({x.NAME : {}}) 
+
+			dic[DC][x.CLUSTER][x.NAME].update({'VMS': len(x.VMS.ID)
+						,'IDS' : x.VMS.ID
+						})
+
+		print dic
 
 if __name__=='__main__':  #Cuerpo Principal
 
@@ -69,7 +85,9 @@ if __name__=='__main__':  #Cuerpo Principal
 				logging.debug("+++++++++++++  " + value['DC'])
 				logging.info(value['IP']+ " "+value['DC'])
 				host = Host(value)
-				host.listar()
+				#host.listar()
+				host.diccionario(value['DC'])
+
 			except pyone.OneAuthenticationException as e:
 				logging.debug("Error de autenticacion ")
 			
