@@ -1,0 +1,20 @@
+{
+  "HIPERVISOR": {
+    "Descripcion del hipervisor": {
+      "CRED": {
+        "USER": "xxxxxxxxxxx",
+        "PWD": "xxxxxxxxxxx"
+      },
+      "IP": "IP_administracion"
+      ,"DC" : "Desc corta"
+    }
+   
+  }
+  ,"NOTIFICATION": {
+    "RECEIVERS": [
+      "email"
+    ],
+    "FROM" : "noreply_hypercx@kionetworks.com"
+  },
+  "SMTP" : "IP o FQDN"
+}	

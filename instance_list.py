@@ -39,12 +39,17 @@ class Instancia():
 		
 
 	def Conectar (self, ip, user, passwd):
-		self.HPVS = "http://{}:2633/RPC2".format(ip)
-		credencial = "{}:{}".format(user,passwd)
+		try:
+			self.HPVS = "http://{}:2633/RPC2".format(ip)
+			credencial = "{}:{}".format(user,passwd)
 
-		self.one = pyone.OneServer(self.HPVS
-			, session=credencial
-			, context=ssl._create_unverified_context() )
+			self.one = pyone.OneServer(self.HPVS
+				, session=credencial
+				, context=ssl._create_unverified_context() )
+		except pyone.OneAuthenticationException as e:
+			logging.debug("Error de autenticacion") 
+			#raise
+		
 
 	def info(self,debuging=False, colEspecifico=0):
 		#vm_template = self.one.templatepool.info(-1, -1, -1).VMTEMPLATE[0]
@@ -92,6 +97,7 @@ class Instancia():
 					)
 
 		except Exception as e:
+			logging.info("Excepcion en list_csv")
 			raise e
 
 			
@@ -111,13 +117,21 @@ if __name__=='__main__':  #Cuerpo Principal
 			#	print key
 			#print value
 			#print "---------------------------------------------" + key
-			one = Instancia()
-			#print value['IP']+ value['CRED']['USER']+value['CRED']['PWD']
-			logging.info(value['IP'])
-			one.Conectar(value['IP'], value['CRED']['USER'], value['CRED']['PWD'])
-			one.info()
-			one.list_csv(value['DC'])	
-		
+			try:
+				
+				one = Instancia()
+				#print value['IP']+ value['CRED']['USER']+value['CRED']['PWD']
+				logging.info(value['IP']+ " "+value['DC'])
+				one.Conectar(value['IP'], value['CRED']['USER'], value['CRED']['PWD'])
+				one.info()
+				one.list_csv(value['DC'])
+			except pyone.OneAuthenticationException as e:
+				logging.debug("Error de autenticacion ")
+			else :
+				logging.debug("no ubo excepciones")
+			finally:
+				logging.info("Finalizo el buque de " +value['IP']+ " "+value['DC'])
+
 
 	        
 		timeEnd = datetime.now() 
@@ -139,11 +153,10 @@ if __name__=='__main__':  #Cuerpo Principal
 
 	    #logging.removeHandler(fh)
 	   
-	except pyone.OneAuthenticationException as e:
-		
-		logging.debug(e)
 	except Exception as e:
-			logging.info( e)
+		logging.info( e)
+	finally:
+		logging.info("Fianlizo el script")
 
 
 
