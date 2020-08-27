@@ -1,13 +1,13 @@
+#http://docs.opennebula.io/5.12/integration/system_interfaces/api.html
 import pyone
 import ssl
 import sys
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta,date
 import json
 import logging
 import os
 
 from Connection import Connection 
-#http://docs.opennebula.io/5.12/integration/system_interfaces/api.html
 
 class Host():
 	"""docstring for ClassName"""
@@ -40,7 +40,7 @@ class Host():
 		"""Listar host 
 			Resulto se imprime en pantalla, opcion facil para obtener un csv
 		"""
-		dic = {DC : {}}
+		dic = {DC.encode('ascii','ignore'):{}}
 		cluster = {}
 
 
@@ -60,7 +60,7 @@ class Host():
 						,'IDS' : x.VMS.ID
 						})
 
-		print dic
+		return dic
 
 if __name__=='__main__':  #Cuerpo Principal
 
@@ -85,8 +85,11 @@ if __name__=='__main__':  #Cuerpo Principal
 				logging.debug("+++++++++++++  " + value['DC'])
 				logging.info(value['IP']+ " "+value['DC'])
 				host = Host(value)
-				#host.listar()
-				host.diccionario(value['DC'])
+				tmp =host.listar()
+				#tmp =host.diccionario(value['DC'])
+				
+				#print type(tmp)
+
 
 			except pyone.OneAuthenticationException as e:
 				logging.debug("Error de autenticacion ")

@@ -1,3 +1,5 @@
+#http://docs.opennebula.io/5.12/integration/system_interfaces/api.html
+
 import pyone
 import ssl
 import sys
@@ -5,7 +7,8 @@ from datetime import datetime,timedelta
 import json
 import logging
 
-#http://docs.opennebula.io/5.12/integration/system_interfaces/api.html
+from Connection import Connection 
+
 
 strFileLog = "logs/{}-{}".format(datetime.now().strftime("%Y%m%d"), __file__.replace(".py",".log") )
 
@@ -34,48 +37,26 @@ STATE_DICT = {"-2":	"Any state / including DONE",
 
 class Instancia():
 	"""docstring for ClassName"""
-	def __init__(self):
-		value = ""
+	def __init__(self,value):
+		self.conection = Connection()
+		self.conection.conectar(value['IP'], value['CRED']['USER'], value['CRED']['PWD'])
+		self.objVM = self.conection.info("VM")
 		
 
-	def Conectar (self, ip, user, passwd):
-		try:
-			self.HPVS = "http://{}:2633/RPC2".format(ip)
-			credencial = "{}:{}".format(user,passwd)
-
-			self.one = pyone.OneServer(self.HPVS
-				, session=credencial
-				, context=ssl._create_unverified_context() )
-		except pyone.OneAuthenticationException as e:
-			logging.debug("Error de autenticacion") 
-			#raise
-		
-
-	def info(self,debuging=False, colEspecifico=0):
-		#vm_template = self.one.templatepool.info(-1, -1, -1).VMTEMPLATE[0]
-		#print dir(vm_template)
-		#sys.exit()
-
-		self.objVM = self.one.vmpool.infoextended(-1,-1,-1,-1)
-		self.objHOSTPOOL = self.one.hostpool.info()
-		#print self.one.vmpool.info(-1,-1,-1,-1)
-		#print "fin info fucntion"
-
-	def list_csv(self,DC):
+	def list_csv(self,DC,IP):
 		try:		
 
 			for cont, objVM in enumerate(self.objVM.VM):
 
+				print (self.objVM.VM[0].TEMPLATE)
 				setting = objVM.get_TEMPLATE()
 
+				print setting
 				if setting.get('NIC') is None :
 					IP = None
 					MAC = None
 				else :
-					#print "mas de una ip "
-					#print len( setting.get('NIC') )
-					#print type(setting.get('NIC') )
-
+	
 					if (len( setting.get('NIC') ) > 1) and (isinstance( setting.get('NIC'), list) ):
 						listIP = []
 						listMAC = []
@@ -92,7 +73,7 @@ class Instancia():
 						MAC = setting.get('NIC').get('MAC')
 				
 
-				print "{},{},{},{},{},{},{},{},{},{},{}".format(DC, self.HPVS,"HOST", objVM.ID, objVM.NAME,IP,MAC
+				print "{},{},{},{},{},{},{},{},{},{},{}".format(DC, IP,"HOST", objVM.ID, objVM.NAME,IP,MAC
 					, STATE_DICT[objVM.STATE], setting.get('MEMORY'), setting.get('CPU') , setting.get('VCPU') 
 					)
 
@@ -119,12 +100,12 @@ if __name__=='__main__':  #Cuerpo Principal
 			#print "---------------------------------------------" + key
 			try:
 				
-				one = Instancia()
+				one = Instancia(value)
 				#print value['IP']+ value['CRED']['USER']+value['CRED']['PWD']
 				logging.info(value['IP']+ " "+value['DC'])
-				one.Conectar(value['IP'], value['CRED']['USER'], value['CRED']['PWD'])
-				one.info()
-				one.list_csv(value['DC'])
+				#one.Conectar(value['IP'], value['CRED']['USER'], value['CRED']['PWD'])
+				#one.info()
+				one.list_csv(value['DC'],value['IP'])
 			except pyone.OneAuthenticationException as e:
 				logging.debug("Error de autenticacion ")
 			else :
